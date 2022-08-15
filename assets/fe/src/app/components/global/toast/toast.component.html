@@ -1,0 +1,46 @@
+<ng-template #Toast let-toast="toast"> 
+    <ngb-toast
+        [class]="toast.classname"
+        [autohide]="true"
+        [delay]="toast.delay || 3000"
+        (hidden)="$toast.remove(toast)"
+        [class.is-template]="isTemplate(toast) || !isString(toast)"
+        >
+        <ng-template [ngIf]="isTemplate(toast)"   [ngIfElse]="text">
+            <ng-template [ngTemplateOutlet]="toast.textOrTpl"></ng-template>
+        </ng-template>
+        <ng-template #text>
+            <ng-container *ngIf="isString(toast); else Comp">
+            {{ toast.textOrTpl }}
+            </ng-container>
+            <ng-template #Comp >
+            <ng-container [ngComponentOutlet]="toast.textOrTpl"> 
+            </ng-container>
+            </ng-template>
+        </ng-template>
+    </ngb-toast>
+</ng-template>
+<!-- Top right -->
+<div
+    style="z-index: 2000"
+    class="position-fixed m-4 top-0 end-0"
+    >
+    <ng-container 
+        *ngFor="let toast of topRightToasts"
+        [ngTemplateOutlet]="Toast" 
+        [ngTemplateOutletContext]="{ toast }" > </ng-container>
+</div>
+<!-- / -->
+<!-- Bottom Center -->
+<div
+    style="z-index: 2000"
+    class="position-fixed d-flex align-items-center justify-content-center m-4 bottom-0 start-0 end-0"
+    >
+    <div class="max-w-full">
+    <ng-container 
+        *ngFor="let toast of bottomCenterToasts"
+        [ngTemplateOutlet]="Toast" 
+        [ngTemplateOutletContext]="{ toast }" > </ng-container>
+    </div>
+</div>
+<!-- / -->
